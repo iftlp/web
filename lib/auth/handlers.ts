@@ -17,6 +17,7 @@ declare module 'next-auth' {
 
   interface Session {
     user: {
+      name: string
       email: string
       jwt?: string
     }
@@ -49,7 +50,9 @@ export const { signIn, signOut, handlers, auth } = NextAuth({
         const token = await response.text()
         if (!token) return null
 
+        // TODO: Récupérer le nom de l'administrateur
         return {
+          name: 'Administrateur',
           email: credentials.email,
           jwt: token,
         }
