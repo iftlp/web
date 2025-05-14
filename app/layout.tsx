@@ -1,17 +1,13 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import type { ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 
 export const metadata: Metadata = {
   title: 'Shizima',
   description: 'Shazam clone',
 }
 
-type Props = {
-  children: ReactNode
-}
-
-export default function RootLayout({ children }: Props) {
+export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="fr">
       <body>{children}</body>
