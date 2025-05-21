@@ -1,6 +1,6 @@
 'use client'
 
-import type { ColumnDef, Row } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
@@ -21,13 +21,13 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   noResultText?: string
-  onClick?: (id: string) => void
+  onClick?: (row: TData) => void
 }
 
 export function DataTableBackendPaginated<TData, TValue>({
   columns,
   data,
-  noResultText = 'No data found',
+  noResultText = 'Aucun résultat',
   onClick,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
@@ -64,9 +64,7 @@ export function DataTableBackendPaginated<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
                 onClick={
-                  onClick
-                    ? () => onClick((row.original as Row<TData>).id)
-                    : undefined
+                  onClick ? () => onClick(row.original as TData) : undefined
                 }
                 className={onClick ? 'cursor-pointer' : ''}
               >

@@ -2,7 +2,7 @@ import type { FC, ReactElement, ReactNode } from 'react'
 import { Children, isValidElement } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { Info } from 'lucide-react'
-import { BreadCrumb } from '@/components/shared/Breadcrumb'
+import { BreadCrumb } from '@/components/shared/breadcrumb/Breadcrumb'
 
 export type PageLayoutProps = {
   children: ReactNode
