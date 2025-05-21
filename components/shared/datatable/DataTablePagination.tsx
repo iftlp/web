@@ -26,9 +26,7 @@ function getParams(
   value: string,
 ): string {
   const newParams = new URLSearchParams(params)
-
   newParams.set(parameterName, value)
-
   return `?${newParams.toString()}`
 }
 
@@ -36,18 +34,19 @@ export function DataTablePagination({
   page,
   pageSize,
   totalItems,
-  sizes = [10, 30, 50, 100],
+  sizes = [10, 20, 30, 50, 100],
 }: Props) {
   const params = useSearchParams()
   const router = useRouter()
 
-  const previousPage = page - 1 <= 1 ? 1 : page - 1
-  const lastPage = pageSize !== 0 ? Math.ceil(totalItems / pageSize) : 1
-  const nextPage = lastPage === page ? lastPage : page + 1
+  const previousPage = page <= 0 ? 0 : page - 1
+  const lastPage =
+    pageSize !== 0 ? Math.max(Math.ceil(totalItems / pageSize) - 1, 0) : 0
+  const nextPage = page >= lastPage ? lastPage : page + 1
 
   const canGoNext = page < lastPage
-  const canGoPrevious = page > 1
-  const canGoFirst = page > 1
+  const canGoPrevious = page > 0
+  const canGoFirst = page > 0
   const canGoLast = page < lastPage
 
   return (
@@ -62,10 +61,8 @@ export function DataTablePagination({
             value={pageSize.toString()}
             onValueChange={(value) => {
               const newParams = new URLSearchParams(params)
-
-              newParams.set('page', '1')
+              newParams.set('page', '0')
               newParams.set('size', value)
-
               router.push(`?${newParams.toString()}`)
             }}
           >
@@ -73,16 +70,16 @@ export function DataTablePagination({
               <SelectValue placeholder={pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {sizes.map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {pageSize}
+              {sizes.map((size) => (
+                <SelectItem key={size} value={`${size}`}>
+                  {size}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <p className="text-sm font-medium">
-          Page {page} sur {lastPage}
+          Page {page + 1} sur {lastPage + 1}
         </p>
         <div className="flex items-center space-x-2">
           <Button
@@ -91,7 +88,7 @@ export function DataTablePagination({
             disabled={!canGoFirst}
             asChild
           >
-            <Link href={getParams(params, 'page', '1')}>
+            <Link href={getParams(params, 'page', '0')}>
               <ICONS.DATATABLE_FIRSTPAGE className="size-4" />
             </Link>
           </Button>

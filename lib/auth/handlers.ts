@@ -6,20 +6,29 @@ import { signInUser } from '@/services/auth/signInUser'
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    jwt?: string
+    jwt?: {
+      token: string
+      expires: string
+    }
   }
 }
 
 declare module 'next-auth' {
   interface User {
-    jwt?: string
+    jwt?: {
+      token: string
+      expires: string
+    }
   }
 
   interface Session {
     user: {
       name: string
       email: string
-      jwt?: string
+      jwt?: {
+        token: string
+        expires: string
+      }
     }
   }
 }
@@ -47,7 +56,7 @@ export const { signIn, signOut, handlers, auth } = NextAuth({
         })
 
         if (!response.ok) return null
-        const token = await response.text()
+        const token = await response.json()
         if (!token) return null
 
         // TODO: Récupérer le nom de l'administrateur

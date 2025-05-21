@@ -9,10 +9,20 @@ export default auth((req) => {
 
   const isAuthenticated = !!req.auth
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
+  const isTokenExpired =
+    new Date(req.auth?.user?.jwt?.expires ?? '') < new Date() ||
+    !req.auth?.user?.jwt?.token ||
+    !req.auth?.user?.jwt
 
-  if (!isAuthenticated && !isPublicRoute) return Response.redirect(new URL(ROUTES.SIGN_IN, nextUrl))
-  if (nextUrl.pathname === ROUTES.SIGN_IN && isAuthenticated) return Response.redirect(new URL(ROUTES.ROOT, nextUrl))
+  if (!isPublicRoute && isTokenExpired && isAuthenticated) {
+    return Response.redirect(new URL(ROUTES.SIGN_IN, nextUrl))
+  }
 
+  if (!isAuthenticated && !isPublicRoute)
+    return Response.redirect(new URL(ROUTES.SIGN_IN, nextUrl))
+
+  if (nextUrl.pathname === ROUTES.SIGN_IN && isAuthenticated)
+    return Response.redirect(new URL(ROUTES.ARTIST, nextUrl))
 })
 
 export const config = {
