@@ -7,6 +7,8 @@ import { deleteArtistAction } from '@/lib/actions/artists/delete.actions'
 import { EditButton } from '@/components/shared/button/EditButton'
 import { ACTIONS_ROUTES, ROUTES } from '@/constants/routes'
 import { ArtistTabs } from '@/components/pages/(root)/artists/ArtistTabs'
+import { Loader } from '@/components/shared/Loader'
+import { Suspense } from 'react'
 
 type Props = {
   params: Promise<{ artistId: string }>
@@ -48,7 +50,9 @@ export default async function ArtistDetailPage({
       </PageLayout.Actions>
 
       <PageLayout.Content>
-        <ArtistTabs activeTab={activeTab} artistId={artist.id} />
+        <Suspense fallback={<Loader />}>
+          <ArtistTabs activeTab={activeTab} artistId={artist.id} />
+        </Suspense>
       </PageLayout.Content>
     </PageLayout.Root>
   )

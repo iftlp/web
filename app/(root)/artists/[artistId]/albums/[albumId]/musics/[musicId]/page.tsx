@@ -5,6 +5,8 @@ import { DeleteConfirmationModal } from '@/components/shared/DeleteConfirmationM
 import { MusicTabs } from '@/components/pages/(root)/musics/MusicTabs'
 import { getMusicByIdAction } from '@/lib/actions/musics/get-by-id.actions'
 import { deleteMusicAction } from '@/lib/actions/musics/delete.actions'
+import { Loader } from '@/components/shared/Loader'
+import { Suspense } from 'react'
 
 type Props = {
   params: Promise<{ musicId: string; artistId: string }>
@@ -43,7 +45,9 @@ export default async function MusicDetailPage({ searchParams, params }: Props) {
       </PageLayout.Actions>
 
       <PageLayout.Content>
-        <MusicTabs activeTab={activeTab} music={music} />
+        <Suspense fallback={<Loader />}>
+          <MusicTabs activeTab={activeTab} music={music} />
+        </Suspense>
       </PageLayout.Content>
     </PageLayout.Root>
   )
