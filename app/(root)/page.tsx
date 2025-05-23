@@ -1,15 +1,8 @@
-import { auth } from '@/lib/auth/handlers'
 import { redirect } from 'next/navigation'
+import { ROUTES } from '@/constants/routes'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Page() {
-  const session = await auth()
-  if (!session) redirect('/sign-in')
-  return (
-    <>
-      <span className="text-gray-600">Signed in as:</span>
-      <span className="font-medium">{session.user.email}</span>
-    </>
-  )
+  redirect(ROUTES.ARTIST)
 }
